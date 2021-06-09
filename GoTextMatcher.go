@@ -3,6 +3,8 @@ package GoTextMatcher
 import (
 	"bytes"
 	"math"
+	"strings"
+	"unicode"
 )
 
 func CosineSimilarity(baseText []byte, comparisonText []byte) float64 {
@@ -113,4 +115,25 @@ func initializeMatrix(rows int, columns int) [][]int {
 		result[i] = make([]int, columns)
 	}
 	return result
+}
+
+func Ngrams(phrase string, size int) (count map[string]uint32) {
+	words := splitOnNonLetters(phrase)
+	count = make(map[string]uint32, 0)
+	offset := int(math.Floor(float64(size / 2)))
+
+	max := len(words)
+	for i, _ := range words {
+		if i < offset || i+size-offset > max {
+			continue
+		}
+		gram := strings.Join(words[i-offset:i+size-offset], " ")
+		count[gram]++
+	}
+
+	return count
+}
+
+func splitOnNonLetters(phrase string) []string {
+	return strings.FieldsFunc(phrase, func(char rune) bool { return unicode.IsLetter(char) == false })
 }

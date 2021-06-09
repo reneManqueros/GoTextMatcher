@@ -5,6 +5,7 @@ Methods:
 * Cosine Similarity
 * Hamming
 * Levenshtein
+* NGrams
 * More to come...
 
 ### Installation
